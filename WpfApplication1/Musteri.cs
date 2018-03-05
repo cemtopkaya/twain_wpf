@@ -10,13 +10,12 @@ namespace WpfApplication1
 {
     public class Musteri
     {
-        public BitmapImage Image1;
-        public BitmapImage Image2;
-        public DateTime Tarih = DateTime.Now;
-        public String FisBelgeNo;
-        public String KayitNo;
-        public String Adres;
-        public String Telefon;
+        public BitmapImage Image{get;set;}
+        public DateTime Tarih {get;set;}
+        public String FisBelgeNo{get;set;}
+        public String KayitNo{get;set;}
+        public String Adres{get;set;}
+        public String Telefon{get;set;}
 
     }
 }

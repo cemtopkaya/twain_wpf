@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Reporting.WinForms;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -12,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using TwainDotNet;
 using WiaDotNet;
+using Xceed.Wpf.Toolkit;
 
 namespace WpfApplication1
 {
@@ -38,12 +40,12 @@ namespace WpfApplication1
         private void ShowWindow(object sender, EventArgs args)
         {
             this.Show();
-            this.WindowState = WindowState.Normal;
+            this.WindowState = System.Windows.WindowState.Normal;
         }
 
         protected override void OnStateChanged(EventArgs e)
         {
-            if (WindowState == WindowState.Minimized)
+            if (WindowState == System.Windows.WindowState.Minimized)
                 this.Hide();
 
             base.OnStateChanged(e);
@@ -70,9 +72,15 @@ namespace WpfApplication1
                 throw (ex);
             }
         }
+
         Twain _twain;
         private void scan_twain_Click(object sender, RoutedEventArgs e)
         {
+            reportViewer.Reset();
+
+            // Tarihi yaz
+            txtTarih.Text = DateTime.Now.ToShortDateString();
+
             _twain = new Twain(new TwainDotNet.Wpf.WpfWindowMessageHook(this));
             _twain.TransferImage += _twain_TransferImage;
             _twain.ScanningComplete += _twain_ScanningComplete;
@@ -95,7 +103,7 @@ namespace WpfApplication1
         }
         private Bitmap MergedBitmaps(Bitmap bmp1, Bitmap bmp2)
         {
-            Bitmap result = new Bitmap(bmp1.Width*2, bmp1.Height);
+            Bitmap result = new Bitmap(bmp1.Width * 2, bmp1.Height);
             using (Graphics g = Graphics.FromImage(result))
             {
                 g.DrawImage(bmp1, 0, 0);
@@ -158,7 +166,7 @@ namespace WpfApplication1
                 throw new ArgumentNullException("secondImage");
             }
 
-            int outputImageWidth = firstImage.Width + secondImage.Width+1;
+            int outputImageWidth = firstImage.Width + secondImage.Width + 1;
 
             int outputImageHeight = firstImage.Height;
 
@@ -166,13 +174,13 @@ namespace WpfApplication1
 
             using (Graphics g = Graphics.FromImage(outputImage))
             {
-                g.DrawImage(firstImage, 
+                g.DrawImage(firstImage,
                     new System.Drawing.Rectangle(new System.Drawing.Point(), firstImage.Size),
-                    new System.Drawing.Rectangle(new System.Drawing.Point(), firstImage.Size), 
+                    new System.Drawing.Rectangle(new System.Drawing.Point(), firstImage.Size),
                     GraphicsUnit.Pixel);
-                g.DrawImage(secondImage, 
-                    new System.Drawing.Rectangle(new System.Drawing.Point(firstImage.Width + 1,0), secondImage.Size),
-                    new System.Drawing.Rectangle(new System.Drawing.Point(), secondImage.Size), 
+                g.DrawImage(secondImage,
+                    new System.Drawing.Rectangle(new System.Drawing.Point(firstImage.Width + 1, 0), secondImage.Size),
+                    new System.Drawing.Rectangle(new System.Drawing.Point(), secondImage.Size),
                     GraphicsUnit.Pixel);
 
 
@@ -264,6 +272,41 @@ namespace WpfApplication1
             return doc;
         }
         private void btnYazdir_Click(object sender, RoutedEventArgs e)
+        {
+            //System.Windows.Controls.PrintDialog printDialog = new System.Windows.Controls.PrintDialog();
+            //if (printDialog.ShowDialog() == true)
+            //{
+            //    DrawingVisual dv = new DrawingVisual();
+
+            //    var dc = dv.RenderOpen();
+
+            //    var rect = new Rect(new System.Windows.Point(20, 20), new System.Windows.Size(350, 240));
+            //    dc.DrawRoundedRectangle(System.Windows.Media.Brushes.Yellow,
+            //        new System.Windows.Media.Pen(System.Windows.Media.Brushes.Purple, 2),
+            //        rect, 20, 20);
+
+            //    dc.DrawImage(image1.Source, new Rect(0, 0, image1.Width, image1.Height));
+            //    dc.Close();
+
+            //    printDialog.PrintVisual(dv, "Print");
+            //}
+
+            var musteri = new Musteri
+            {
+                Adres = tbAdres.Text,
+                FisBelgeNo = txtFisNo.Text,
+                KayitNo = txKayitNo.Text,
+                Telefon = txTelefon.Text,
+                //Image1 = image1.Source
+            };
+            ReportDataSource rds = new ReportDataSource("Dataset1",new List<Musteri> { musteri });
+            reportViewer.LocalReport.DataSources.Add(rds);
+            reportViewer.LocalReport.ReportEmbeddedResource = "WpfApplication1.Report2.rdlc";
+            reportViewer.RefreshReport();
+
+        }
+
+        public void print_flowDocument()
         {
             // Create a PrintDialog
             var printDlg = new System.Windows.Controls.PrintDialog();

@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-C:\_Projects\WPF\WpfApplication1\WpfApplication1\obj\Debug\
+C:\_Projects\WPF\twain_wpf\WpfApplication1\obj\Debug\
 WpfApplication1
 none
 false
 DEBUG;TRACE
-C:\_Projects\WPF\WpfApplication1\WpfApplication1\App.xaml
+C:\_Projects\WPF\twain_wpf\WpfApplication1\App.xaml
 11151548125
 
 6654425113
-21330807081
+30-1139786411
 MainWindow.xaml;
 
 False
