@@ -17,32 +17,42 @@ using Xceed.Wpf.Toolkit;
 
 namespace WpfApplication1
 {
-
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-
         NotifyIcon ni;
-
         public MainWindow()
         {
             InitializeComponent();
 
+            setTodaysDate();
+
+            setNotifyIcon();
+
+            fillTestValues();         
+        }
+        private void fillTestValues()
+        {
+            tbAdres.Text = "Adres bozuntusu burada olacak";
+            txTelefon.Text = "5334816380";
+            txtFisNo.Text = "FSNo1234";
+            txKayitNo.Text = "KYTNo4322";
+        }
+        private void setNotifyIcon()
+        {
             ni = new NotifyIcon();
             ni.Icon = new Icon(@"C:\_Projects\WPF\WpfApplication1\WpfApplication1\Main.ico");
             ni.Visible = true;
             ni.DoubleClick += ShowWindow;
         }
-
-
+        private void setTodaysDate()
+        {
+            txtTarih.Text = DateTime.Now.ToShortDateString();
+        }
         private void ShowWindow(object sender, EventArgs args)
         {
             this.Show();
             this.WindowState = System.Windows.WindowState.Normal;
         }
-
         protected override void OnStateChanged(EventArgs e)
         {
             if (WindowState == System.Windows.WindowState.Minimized)
@@ -50,7 +60,6 @@ namespace WpfApplication1
 
             base.OnStateChanged(e);
         }
-
         private void scan_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -72,7 +81,6 @@ namespace WpfApplication1
                 throw (ex);
             }
         }
-
         Twain _twain;
         private void scan_twain_Click(object sender, RoutedEventArgs e)
         {
@@ -123,7 +131,6 @@ namespace WpfApplication1
             //image1.Width = source.PixelWidth;
             //image1.Height = source.PixelHeight;
         }
-
         public static Bitmap MergeTwoImagesVertical(System.Drawing.Image firstImage, System.Drawing.Image secondImage)
         {
             if (firstImage == null)
@@ -152,8 +159,6 @@ namespace WpfApplication1
 
             return outputImage;
         }
-
-
         public static Bitmap MergeTwoImagesHorizontal(System.Drawing.Image firstImage, System.Drawing.Image secondImage)
         {
             if (firstImage == null)
@@ -199,7 +204,6 @@ namespace WpfApplication1
 
             return outputImage;
         }
-
         BitmapImage BitmapToImageSource(Bitmap bitmap)
         {
             using (MemoryStream memory = new MemoryStream())
@@ -238,7 +242,6 @@ namespace WpfApplication1
             //    }
             //}
         }
-
         private FlowDocument CreateFlowDocument()
         {
             // Create a FlowDocument
@@ -299,13 +302,12 @@ namespace WpfApplication1
                 Telefon = txTelefon.Text,
                 //Image1 = image1.Source
             };
-            ReportDataSource rds = new ReportDataSource("Dataset1",new List<Musteri> { musteri });
+            ReportDataSource rds = new ReportDataSource("DataSet1", new List<Musteri> { musteri });
             reportViewer.LocalReport.DataSources.Add(rds);
             reportViewer.LocalReport.ReportEmbeddedResource = "WpfApplication1.Report2.rdlc";
             reportViewer.RefreshReport();
 
         }
-
         public void print_flowDocument()
         {
             // Create a PrintDialog
